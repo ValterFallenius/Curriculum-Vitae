@@ -11,11 +11,12 @@ daysahead = int(input("How many days ahead from today ("+ str(today)+ ") do you 
 
 #Here goes the path to your chromedriver.exe file:
 path_to_chromedriver = 'C:\Program Files\chromedriver\chromedriver.exe'
-driver = webdriver.Chrome(executable_path=path_to_chromedriver)
 
 dates=[] #List to store exact date
 prices=[] #List to store price of the tickets
-my_url="https://www.sj.se/#/tidtabell/K%25C3%25B6benhavn%2520H/Stockholm%2520Central/enkel/avgang/20200101-0500/avgang/20200101-1500/BO-22--false///0//"
+my_url="https://www.sj.se/#/tidtabell/K%25C3%25B6benhavn%2520H/Stockholm%2520Central/enkel/avgang/20200101-0001/avgang/20200101-0001/BO-22--false///0//"
+driver = webdriver.Chrome(executable_path=path_to_chromedriver)
+
 
 for i in range(daysahead):
     prices_today = []
@@ -24,16 +25,17 @@ for i in range(daysahead):
     my_url = my_url.replace(my_url[90:98],str(today).replace("-", ""),2)
 
     driver.get(my_url)
-    sleep(5)
-    button = driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div/main/div[1]/div/div/div/div[1]/div[3]/div[1]/div/div/div[5]/div[4]/div/button")
-    sleep(5)
-    button.click()
-    sleep(5)
+    sleep(3)
+    for i in range(2):
+        button = driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div/main/div[1]/div/div/div/div[1]/div[3]/div[1]/div/div/div[5]/div[4]/div/button")
+        if button.get_attribute("class")!="timetable__navigation-container timetable__link-hover-state timetable__navigation-button outline ng-scope":
+            continue
+        #href_data = button.get_attribute('href')
+        #if href_data is not None:
+        #    sleep(3)
+        button.click()
+        sleep(3)
 
-    button = driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div/main/div[1]/div/div/div/div[1]/div[3]/div[1]/div/div/div[5]/div[4]/div/button")
-    sleep(5)
-    button.click()
-    sleep(5)
     content = driver.page_source
     soup = BeautifulSoup(content, features="html.parser")
 
